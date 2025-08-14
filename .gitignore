@@ -1,0 +1,36 @@
+# OS / IDE
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+
+# Model artifacts
+*.pt
+*.onnx
+*.rknn
+*.log
+
+# Media (test assets)
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.jpg
+*.jpeg
+*.png
+*.bmp
+
+# Data and run outputs (large, regenerated)
+datasets/
+images/
+label_sample/
+runs/
+test_results/
+
+# Upstream repository (managed externally)
+ultralytics/
+
+# Local env logs
+env_info.log
+
