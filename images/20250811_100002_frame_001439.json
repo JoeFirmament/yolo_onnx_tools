@@ -1,0 +1,44 @@
+{
+  "version": "0.4.30",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "rim",
+      "text": "",
+      "points": [
+        [
+          555.1746826171875,
+          249.02830505371094
+        ],
+        [
+          977.3157958984375,
+          676.95654296875
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "basketball",
+      "text": "",
+      "points": [
+        [
+          674.7745361328125,
+          395.90301513671875
+        ],
+        [
+          888.8704833984375,
+          616.4307861328125
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    }
+  ],
+  "imagePath": "20250811_100002_frame_001439.jpg",
+  "imageData": null,
+  "imageHeight": 960,
+  "imageWidth": 1280
+}

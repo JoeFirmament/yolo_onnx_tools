@@ -1,0 +1,12 @@
+# 临时数据集配置文件，用于ONNX导出
+# 这个文件只是为了满足YOLOv8的验证要求，实际导出时不会使用数据
+
+path: /Users/quill/rk3588_Tutorial/datasets/temp  # 数据集根目录
+train: images/train  # 训练图片目录（相对于path）
+val: images/val      # 验证图片目录（相对于path）
+
+# 类别数量和名称（根据篮球检测任务）
+nc: 2
+names:
+  0: basketball
+  1: rim
