@@ -1,0 +1,31 @@
+# YOLO Annotation Tool Dependencies
+# Core ML and Computer Vision
+torch>=2.0.0
+torchvision>=0.15.0
+ultralytics>=8.0.0
+opencv-python>=4.8.0
+numpy>=1.21.0
+
+# Image Processing
+Pillow>=9.0.0
+
+# GUI (usually included with Python)
+# tkinter - included with Python
+
+# Packaging
+pyinstaller>=5.13.0
+
+# Optional: For better performance
+# torch-audio  # 如果需要音频处理
+# onnx>=1.12.0  # 如果需要ONNX支持
+# onnxruntime>=1.15.0  # ONNX运行时
+
+# Platform specific (uncomment if needed)
+# Windows specific
+# pywin32>=306  # Windows下可能需要
+
+# macOS specific  
+# py2app>=0.28  # macOS应用打包（可选）
+
+# Linux specific
+# python3-tk  # Linux下可能需要单独安装tkinter

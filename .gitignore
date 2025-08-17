@@ -1,25 +1,76 @@
 # OS / IDE
 .DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
 
 # Python
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 
 # Model artifacts
 *.pt
+*.pth
 *.onnx
 *.rknn
-*.log
+*.trt
+*.engine
+*.weights
+*.wts
 
-# Media (test assets)
+# Media files (images, videos, audio)
 *.mp4
 *.avi
 *.mov
 *.mkv
+*.wmv
+*.flv
+*.webm
+*.m4v
 *.jpg
 *.jpeg
 *.png
 *.bmp
+*.gif
+*.tiff
+*.tif
+*.webp
+*.svg
+*.ico
+*.wav
+*.mp3
+*.flac
+*.aac
+*.ogg
 
 # Data and run outputs (large, regenerated)
 datasets/
@@ -27,10 +78,36 @@ images/
 label_sample/
 runs/
 test_results/
+weights/
+checkpoints/
+logs/
+tensorboard/
+wandb/
+Billiards/
 
 # Upstream repository (managed externally)
 ultralytics/
 
-# Local env logs
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
+
+# Local env logs and configs
 env_info.log
+*.log
+*.out
+
+# Temporary files
+*.tmp
+*.temp
+tmp/
+temp/
+
+# Documentation builds (if using sphinx)
+docs/_build/
+
+# Release artifacts
+release/
+*.zip
+*.tar.gz
+*.tar.bz2
 
