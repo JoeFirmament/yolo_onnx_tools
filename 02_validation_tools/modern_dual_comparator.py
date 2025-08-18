@@ -44,11 +44,21 @@ from pathlib import Path
 from ultralytics import YOLO
 import platform
 from datetime import datetime
+import sys
+import traceback
+
+# ======== 调试打印工具 ========
+def dbg(msg):
+    try:
+        print(f"[DBG {time.strftime('%H:%M:%S')}] {msg}", flush=True)
+    except Exception:
+        pass
 
 class ModernDualComparator:
     """现代化双模型对比工具"""
     
     def __init__(self, root):
+        dbg("__init__ start")
         self.root = root
         self.root.title("PT vs ONNX Model Comparator")
         self.root.geometry("1600x1000")  # 增加高度
@@ -79,11 +89,31 @@ class ModernDualComparator:
         self.basketball_onnx_miss = 0
         self.rim_pt_miss = 0
         self.rim_onnx_miss = 0
-    
+        dbg("__init__ vars ok")
+
+        # 构建样式与界面
+        self.setup_styles()
+        dbg("before setup_modern_ui")
+        self.setup_modern_ui()
+        dbg("after setup_modern_ui")
+        self.root.after(100, self.initialize_display)
+        dbg("__init__ end (after scheduled)")
+
     def setup_styles(self):
         """配置TTK样式"""
+        dbg("setup_styles enter")
         style = ttk.Style()
-        style.theme_use('clam')
+        try:
+            dbg(f"themes={style.theme_names()}")
+            style.theme_use('clam')
+            dbg("theme_use clam ok")
+        except Exception as e:
+            dbg(f"theme_use clam failed: {e}; fallback default")
+            try:
+                style.theme_use('default')
+                dbg("theme_use default ok")
+            except Exception as ee:
+                dbg(f"theme_use default failed: {ee}")
         
         # 按钮样式 - 参考成功实现
         style.configure('Primary.TButton',
@@ -124,42 +154,42 @@ class ModernDualComparator:
         self.strides = [8, 16, 32]  # P3, P4, P5层的步长
         self.reg_max = 16  # DFL的分布数量
         
-        # 日志记录初始化
+        # 日志记录初始化（仅数据，不做界面构建）
         self.session_start_time = None
         self.log_data = {
             'pt_model_path': None,
             'onnx_model_path': None,
             'video_path': None
         }
-        
-        # 配置TTK样式
-        self.setup_styles()
-        
-        # 创建现代化界面
-        self.setup_modern_ui()
-        self.root.after(100, self.initialize_display)
     
     def setup_modern_ui(self):
         """创建现代化界面"""
+        dbg("setup_modern_ui enter")
         # 主容器
         main_container = tk.Frame(self.root, bg='#f5f6fa')
         main_container.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
+        dbg("main_container ok")
         
         # 顶部标题区域
         self.create_header(main_container)
+        dbg("header ok")
         
         # 中间内容区域
         content_frame = tk.Frame(main_container, bg='#f5f6fa')
         content_frame.pack(fill=tk.BOTH, expand=True, pady=(20, 0))
+        dbg("content_frame ok")
         
         # 左侧控制面板
         self.create_control_cards(content_frame)
+        dbg("controls ok")
         
         # 中间视频对比区域
         self.create_video_comparison(content_frame)
+        dbg("video_comparison ok")
         
         # 右侧统计面板
         self.create_stats_cards(content_frame)
+        dbg("stats ok")
     
     def create_header(self, parent):
         """创建顶部标题区域"""
@@ -614,7 +644,9 @@ class ModernDualComparator:
     
     def initialize_display(self):
         """初始化显示"""
+        dbg("initialize_display enter")
         self.update_status("Ready - Load both models to begin comparison")
+        dbg("initialize_display exit")
     
     def on_save_toggle(self):
         """保存开关切换事件"""
@@ -717,7 +749,7 @@ class ModernDualComparator:
                 print(f"✅ 自动选择精度: {precision} (测试置信度: {confidence:.4f})")
                 
                 model_name = Path(model_path).stem
-                self.pt_btn.config(text=f"✓ {model_name}", bg='#d5edda', fg='#155724')
+                self.pt_btn.config(text=f"✓ {model_name}", style='Success.TButton')
                 self.pt_status.config(text=f"Model loaded ({precision}) successfully", fg='#27ae60')
                 self.update_status(f"PT model loaded ({precision}): {model_name}")
                 # 记录日志信息
@@ -761,7 +793,7 @@ class ModernDualComparator:
                 precision = self.check_onnx_precision(self.onnx_session)
                 
                 model_name = Path(model_path).stem
-                self.onnx_btn.config(text=f"✓ {model_name}", bg='#cce5f0', fg='#0c5460')
+                self.onnx_btn.config(text=f"✓ {model_name}", style='Primary.TButton')
                 self.onnx_status.config(text=f"Model loaded ({precision}) successfully", fg='#27ae60')
                 self.update_status(f"ONNX model loaded ({precision}): {model_name}")
                 # 记录日志信息
@@ -779,7 +811,7 @@ class ModernDualComparator:
         if video_path:
             self.video_path = video_path
             video_name = Path(video_path).stem
-            self.video_btn.config(text=f"✓ {video_name}", bg='#d1ecf1', fg='#0c5460')
+            self.video_btn.config(text=f"✓ {video_name}", style='Primary.TButton')
             self.update_status(f"Video selected: {video_name}")
             self.show_first_frame()
             # 记录日志信息
@@ -854,7 +886,7 @@ class ModernDualComparator:
         from datetime import datetime
         self.session_start_time = datetime.now()
         
-        self.play_btn.config(text="⏸ Pause", bg='#f39c12')
+        self.play_btn.config(text="⏸ Pause", style='Primary.TButton')
         
         if self.video_thread is None or not self.video_thread.is_alive():
             self.video_thread = Thread(target=self.video_loop, daemon=True)
@@ -1850,6 +1882,7 @@ class ModernDualComparator:
 
 def main():
     """主函数"""
+    dbg("main enter")
     # 记录平台/CPU/OS信息
     try:
         info_line = f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | {platform.system()} {platform.release()} | {platform.machine()} | {platform.processor()}\n"
@@ -1857,9 +1890,22 @@ def main():
             f.write(info_line)
     except Exception:
         pass
-    root = tk.Tk()
-    app = ModernDualComparator(root)
-    root.mainloop()
+    try:
+        root = tk.Tk()
+        dbg("Tk() ok")
+        # 捕获 Tk 回调中的异常
+        def tk_excepthook(exc, val, tb):
+            print("\n[TK CALLBACK EXCEPTION]", file=sys.stderr)
+            traceback.print_exception(exc, val, tb)
+        root.report_callback_exception = tk_excepthook
+
+        app = ModernDualComparator(root)
+        dbg("App constructed")
+        root.after(0, lambda: dbg("mainloop scheduled"))
+        root.mainloop()
+        dbg("mainloop exit")
+    except Exception:
+        traceback.print_exc()
 
 
 if __name__ == "__main__":
