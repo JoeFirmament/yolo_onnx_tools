@@ -40,26 +40,26 @@ class RK3588ExportGUI:
         self.root.geometry("900x700")
         self.root.minsize(800, 600)
         
-        # 现代化配色方案 - 参考成功实现
+        # 专业低饱和度配色方案 - 遵循终极指南标准
         self.colors = {
-            'bg': '#f5f6fa',        # 主背景 - 浅紫灰色
-            'card': '#ffffff',      # 卡片背景 - 纯白
-            'primary': '#ff4757',   # 主色调 - 红色强调
-            'success': '#2ed573',   # 成功绿色
-            'danger': '#ff3838',    # 错误红色
-            'warning': '#ffa502',   # 警告橙色
-            'text': '#2f3542',      # 主文字 - 深灰
-            'text_muted': '#57606f', # 次要文字 - 中灰
-            'text_light': '#a4b0be', # 辅助文字 - 浅灰
-            'border': '#f1f2f6',    # 边框色 - 极浅灰
-            'accent': '#ff6b7a',     # 辅助强调色
+            'bg': '#f8f9fa',        # 主背景：极浅灰白（清洁专业）
+            'card': '#ffffff',      # 卡片背景：纯白（突出内容）
+            'primary': '#6c757d',   # 主色调：中性灰（专业稳重）
+            'success': '#6c9b7f',   # 成功色：柔和绿（清淡有效）
+            'danger': '#a0727d',    # 危险色：暗红灰（温和警告）
+            'warning': '#b8860b',   # 警告色：暗金色（低调提醒）
+            'text': '#212529',      # 主文字：深灰黑（最高可读性）
+            'text_muted': '#6c757d', # 次要文字：中性灰（清晰层次）
+            'text_light': '#adb5bd', # 辅助文字：浅灰（不干扰）
+            'border': '#e9ecef',    # 边框色：浅灰（微妙分割）
+            'accent': '#6c9b7f',    # 辅助强调色：柔和绿
             # 保持兼容性的旧属性名
-            'text_secondary': '#57606f',
-            'success_text': '#2ed573',
-            'error_text': '#ff3838',
-            'warning_text': '#ffa502',
-            'info': '#f4f5f6',
-            'info_text': '#7788aa',
+            'text_secondary': '#6c757d',
+            'success_text': '#6c9b7f',
+            'error_text': '#a0727d',
+            'warning_text': '#b8860b',
+            'info': '#f1f3f4',
+            'info_text': '#5a7a8a',
         }
         
         # 设置字体
@@ -90,11 +90,11 @@ class RK3588ExportGUI:
         style = ttk.Style()
         style.theme_use('clam')
         
-        # 按钮样式 - 参考auto_annotation_tool_classify.py的成功实现
+        # 按钮样式 - 专业低饱和度配色
         style.configure('Primary.TButton',
                        font=('SF Pro Text', 11, 'bold'),
                        foreground='white',
-                       background='#ff4757',
+                       background='#6c757d',
                        borderwidth=0,
                        focuscolor='none',
                        padding=(20, 10))
@@ -102,7 +102,7 @@ class RK3588ExportGUI:
         style.configure('Success.TButton',
                        font=('SF Pro Text', 11, 'bold'),
                        foreground='white',
-                       background='#2ed573',
+                       background='#6c9b7f',
                        borderwidth=0,
                        focuscolor='none',
                        padding=(20, 10))
@@ -113,7 +113,7 @@ class RK3588ExportGUI:
                        borderwidth=1,
                        relief='solid',
                        bordercolor='#ddd',
-                       insertcolor='#2f3542',  # 🔑 光标颜色
+                       insertcolor='#212529',  # 🔑 光标颜色
                        insertwidth=2,  # 🔑 光标宽度
                        font=('SF Pro Text', 11))
         
@@ -556,7 +556,13 @@ cls3: [B, NC, H3, W3]
             # 应用RK3588优化
             detect_head = model.model.model[-1]
             rk3588_forward = create_rk3588_forward(detect_head)
-            detect_head.forward = types.MethodType(rk3588_forward, detect_head)
+            # 统一导出为6输出：对可能的4头模型再加一层保险，仅返回前3头(6张量)
+            def forward_6only(self, x):
+                out = rk3588_forward(self, x)
+                if isinstance(out, (list, tuple)):
+                    return list(out)[:6]
+                return out
+            detect_head.forward = types.MethodType(forward_6only, detect_head)
             
             self.update_status("正在导出ONNX模型...", "info")
             

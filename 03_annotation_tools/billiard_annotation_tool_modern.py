@@ -29,26 +29,26 @@ class ModernBilliardAnnotationTool:
         self.root.geometry("1100x800")
         self.root.minsize(900, 650)
         
-        # 现代化配色方案 - 参考成功实现
+        # 专业低饱和度配色方案 - 遵循终极指南标准
         self.colors = {
-            'bg': '#f5f6fa',        # 主背景 - 浅紫灰色
-            'card': '#ffffff',      # 卡片背景 - 纯白
-            'primary': '#ff4757',   # 主色调 - 红色强调
-            'success': '#2ed573',   # 成功绿色
-            'danger': '#ff3838',    # 错误红色
-            'warning': '#ffa502',   # 警告橙色
-            'text': '#2f3542',      # 主文字 - 深灰
-            'text_muted': '#57606f', # 次要文字 - 中灰
-            'text_light': '#a4b0be', # 辅助文字 - 浅灰
-            'border': '#f1f2f6',    # 边框色 - 极浅灰
-            'accent': '#ff6b7a',     # 辅助强调色
+            'bg': '#f8f9fa',        # 主背景：极浅灰白（清洁专业）
+            'card': '#ffffff',      # 卡片背景：纯白（突出内容）
+            'primary': '#6c757d',   # 主色调：中性灰（专业稳重）
+            'success': '#6c9b7f',   # 成功色：柔和绿（清淡有效）
+            'danger': '#a0727d',    # 危险色：暗红灰（温和警告）
+            'warning': '#b8860b',   # 警告色：暗金色（低调提醒）
+            'text': '#212529',      # 主文字：深灰黑（最高可读性）
+            'text_muted': '#6c757d', # 次要文字：中性灰（清晰层次）
+            'text_light': '#adb5bd', # 辅助文字：浅灰（不干扰）
+            'border': '#e9ecef',    # 边框色：浅灰（微妙分割）
+            'accent': '#6c9b7f',    # 辅助强调色：柔和绿
             # 保持兼容性的旧属性名
-            'text_secondary': '#57606f',
-            'success_text': '#2ed573',
-            'error_text': '#ff3838',
-            'warning_text': '#ffa502',
-            'info': '#f4f5f6',
-            'info_text': '#7788aa',
+            'text_secondary': '#6c757d',
+            'success_text': '#6c9b7f',
+            'error_text': '#a0727d',
+            'warning_text': '#b8860b',
+            'info': '#f1f3f4',
+            'info_text': '#5a7a8a',
         }
         
         # 设置字体

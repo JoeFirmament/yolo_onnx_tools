@@ -52,24 +52,23 @@ class ModernAnnotationTool:
         except:
             pass
         
-        # 现代化配色方案 - 基于参考图的设计
+        # 专业低饱和度配色方案 - 遵循终极指南标准
         self.colors = {
-            'bg': '#f8f9fa',           # 主背景 - 浅灰白
+            'bg': '#f8f9fa',           # 主背景 - 极浅灰白
             'sidebar': '#ffffff',       # 侧边栏背景
             'card': '#ffffff',          # 卡片背景
-            'primary': '#ff4757',       # 主色调 - 活力红
-            'primary_dark': '#ee3e4f',  # 主色深色
-            'success': '#00d68f',       # 成功绿
-            'warning': '#ffaa00',       # 警告橙
-            'danger': '#ff3d71',        # 危险红
-            'info': '#0095ff',          # 信息蓝
-            'text': '#192038',          # 主文字 - 深蓝黑
-            'text_secondary': '#6e84a3', # 次要文字
-            'text_light': '#9ca9b9',    # 辅助文字
-            'border': '#e3e8ef',        # 边框色
-            'shadow': '#d1dbe6',        # 阴影色
-            'hover': '#f5f7fa',         # 悬停背景
-            'track': '#f1f3f7',         # 进度条轨道
+            'primary': '#6c757d',       # 主色调 - 中性灰
+            'secondary': '#adb5bd',     # 次要色 - 浅灰
+            'success': '#6c9b7f',       # 成功绿 - 柔和
+            'warning': '#b8860b',       # 警告色 - 暗金
+            'danger': '#a0727d',        # 危险色 - 暗红灰
+            'info': '#5a7a8a',          # 信息色 - 深蓝灰
+            'text': '#212529',          # 主文字 - 深灰黑
+            'text_secondary': '#6c757d', # 次要文字 - 中性灰
+            'text_light': '#adb5bd',    # 辅助文字 - 浅灰
+            'border': '#e9ecef',        # 边框色 - 浅灰
+            'hover': '#f1f3f4',         # 悬停背景 - 极浅灰
+            'track': '#e9ecef',         # 进度条轨道 - 浅灰
         }
         
         self.root.configure(bg=self.colors['bg'])
@@ -203,7 +202,7 @@ class ModernAnnotationTool:
         logo_frame.pack_propagate(False)
         
         # 标题
-        title_label = tk.Label(logo_frame, text="🤖 YOLO标注助手",
+        title_label = tk.Label(logo_frame, text="YOLO标注助手",
                               font=('SF Pro Display', 18, 'bold'),
                               bg=self.colors['sidebar'],
                               fg=self.colors['text'])
@@ -239,7 +238,7 @@ class ModernAnnotationTool:
         section.pack(fill='x', padx=20, pady=(0, 10))
         
         # 区域标题
-        tk.Label(section, text="📦 模型配置",
+        tk.Label(section, text="模型配置",
                 font=('SF Pro Display', 13, 'bold'),
                 bg=self.colors['sidebar'],
                 fg=self.colors['text']).pack(anchor='w', pady=(0, 10))
@@ -304,7 +303,7 @@ class ModernAnnotationTool:
         section.pack(fill='x', padx=20, pady=(0, 10))
         
         # 置信度阈值
-        tk.Label(section, text="🎯 检测设置",
+        tk.Label(section, text="检测设置",
                 font=('SF Pro Display', 13, 'bold'),
                 bg=self.colors['sidebar'],
                 fg=self.colors['text']).pack(anchor='w', pady=(0, 10))
@@ -352,7 +351,7 @@ class ModernAnnotationTool:
         
         # 开始处理按钮
         self.process_btn = tk.Button(bottom_frame,
-                                    text="🚀 开始标注",
+                                    text="开始标注",
                                     command=self.start_processing,
                                     bg=self.colors['success'],
                                     fg='white',
@@ -365,7 +364,7 @@ class ModernAnnotationTool:
         
         # 停止按钮
         self.stop_btn = tk.Button(bottom_frame,
-                                 text="⏹ 停止处理",
+                                 text="停止处理",
                                  command=self.stop_processing,
                                  bg=self.colors['danger'],
                                  fg='white',

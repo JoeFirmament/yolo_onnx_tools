@@ -14,7 +14,7 @@ def test_button_styles():
     root = tk.Tk()
     root.title("按钮显示测试 - macOS修复验证")
     root.geometry("600x400")
-    root.configure(bg='#f5f6fa')
+    root.configure(bg='#f8f9fa')
     
     # 配置样式
     style = ttk.Style()
@@ -24,7 +24,7 @@ def test_button_styles():
     style.configure('Primary.TButton',
                    font=('SF Pro Text', 11, 'bold'),
                    foreground='white',
-                   background='#ff4757',
+                   background='#6c757d',
                    borderwidth=0,
                    focuscolor='none',
                    padding=(20, 10))
@@ -32,7 +32,7 @@ def test_button_styles():
     style.configure('Success.TButton',
                    font=('SF Pro Text', 11, 'bold'),
                    foreground='white',
-                   background='#2ed573',
+                   background='#6c9b7f',
                    borderwidth=0,
                    focuscolor='none',
                    padding=(20, 10))
@@ -40,21 +40,21 @@ def test_button_styles():
     style.configure('Danger.TButton',
                    font=('SF Pro Text', 11, 'bold'),
                    foreground='white',
-                   background='#ff3838',
+                   background='#a0727d',
                    borderwidth=0,
                    focuscolor='none',
                    padding=(20, 10))
     
     # 创建测试界面
-    main_frame = tk.Frame(root, bg='#f5f6fa')
+    main_frame = tk.Frame(root, bg='#f8f9fa')
     main_frame.pack(fill='both', expand=True, padx=30, pady=30)
     
     title_label = tk.Label(
         main_frame,
         text="GUI按钮修复测试",
         font=('SF Pro Display', 20, 'bold'),
-        fg='#2f3542',
-        bg='#f5f6fa'
+        fg='#212529',
+        bg='#f8f9fa'
     )
     title_label.pack(pady=(0, 30))
     
@@ -85,8 +85,8 @@ def test_button_styles():
         main_frame,
         text=f"平台: {sys.platform}\n如果你能看到彩色按钮且文字清晰，说明修复成功！",
         font=('SF Pro Text', 12),
-        fg='#57606f',
-        bg='#f5f6fa',
+        fg='#6c757d',
+        bg='#f8f9fa',
         justify='center'
     )
     status_label.pack(pady=30)

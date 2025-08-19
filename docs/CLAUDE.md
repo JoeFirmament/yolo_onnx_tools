@@ -49,6 +49,53 @@ yolo export model=best.pt format=onnx
 python modern_dual_comparator.py
 ```
 
+### GUI开发
+```bash
+# 现代化Tkinter GUI开发 - 参考完整指南
+# 详细教程: docs/tkinter_gui_ultimate_guide.md
+
+# 快速启动模板（直接可运行）：
+python -c "
+import tkinter as tk
+from tkinter import ttk
+import sys, os, warnings
+
+warnings.filterwarnings('ignore', category=UserWarning)
+if sys.platform == 'darwin': os.environ['TK_SILENCE_DEPRECATION'] = '1'
+
+class QuickGUI:
+    def __init__(self):
+        self.root = tk.Tk()
+        self.root.title('现代化GUI')
+        self.root.geometry('800x600')
+        self.colors = {'bg': '#f5f6fa', 'card': '#ffffff', 'primary': '#ff4757'}
+        
+        style = ttk.Style()
+        style.theme_use('clam')
+        style.configure('Primary.TButton', background=self.colors['primary'], 
+                       foreground='white', borderwidth=0, focuscolor='none', padding=(20,10))
+        
+        self.root.configure(bg=self.colors['bg'])
+        
+        main = tk.Frame(self.root, bg=self.colors['bg'])
+        main.pack(fill='both', expand=True, padx=20, pady=20)
+        
+        card = tk.Frame(main, bg=self.colors['card'], highlightbackground='#f1f2f6', highlightthickness=1)
+        card.pack(fill='x', pady=10)
+        
+        content = tk.Frame(card, bg=self.colors['card'])
+        content.pack(fill='x', padx=25, pady=25)
+        
+        ttk.Label(content, text='现代化GUI演示', background=self.colors['card'], 
+                 font=('SF Pro Display', 16, 'bold')).pack(anchor='w', pady=(0,10))
+        ttk.Button(content, text='点击测试', style='Primary.TButton').pack()
+        
+        self.root.mainloop()
+
+QuickGUI()
+"
+```
+
 ### 代码质量检查
 基于pyproject.toml配置：
 ```bash

@@ -62,7 +62,8 @@ class ModernDualComparator:
         self.root = root
         self.root.title("PT vs ONNX Model Comparator")
         self.root.geometry("1600x1000")  # 增加高度
-        self.root.configure(bg='#f5f6fa')
+        self.root.minsize(1200, 800)     # 设置最小尺寸
+        # 稍后设置背景色（在颜色配置后）
         
         # 核心变量
         self.pt_model = None
@@ -91,6 +92,12 @@ class ModernDualComparator:
         self.rim_onnx_miss = 0
         dbg("__init__ vars ok")
 
+        # 设置配色方案
+        self.setup_colors()
+        
+        # 设置主背景色
+        self.root.configure(bg=self.colors['bg'])
+        
         # 构建样式与界面
         self.setup_styles()
         dbg("before setup_modern_ui")
@@ -99,13 +106,42 @@ class ModernDualComparator:
         self.root.after(100, self.initialize_display)
         dbg("__init__ end (after scheduled)")
 
+    def setup_colors(self):
+        """专业低饱和度配色方案 - 遵循终极指南标准"""
+        self.colors = {
+            # === 基础色彩 ===
+            'bg': '#f8f9fa',        # 主背景：极浅灰白（清洁专业）
+            'card': '#ffffff',      # 卡片背景：纯白（突出内容）
+            'border': '#e9ecef',    # 边框色：浅灰（微妙分割）
+            
+            # === 主要功能色 ===
+            'primary': '#6c757d',   # 主色调：中性灰（专业稳重）
+            'secondary': '#adb5bd', # 次要色：浅灰（辅助操作）
+            
+            # === 状态色彩（低饱和度） ===
+            'success': '#6c9b7f',   # 成功色：柔和绿（清淡有效）
+            'warning': '#b8860b',   # 警告色：暗金色（低调提醒）
+            'danger': '#a0727d',    # 危险色：暗红灰（温和警告）
+            'info': '#5a7a8a',      # 信息色：深蓝灰（中性稳重）
+            
+            # === 文字色彩 ===
+            'text': '#212529',      # 主文字：深灰黑（最高可读性）
+            'text_muted': '#6c757d', # 次要文字：中性灰（清晰层次）
+            'text_light': '#adb5bd', # 辅助文字：浅灰（不干扰）
+            
+            # === 交互色彩 ===
+            'hover': '#f1f3f4',     # 悬停色：极浅灰（微妙反馈）
+            'active': '#e9ecef',    # 激活色：浅灰（点击状态）
+            'focus': '#4a90b8',     # 焦点色：淡蓝（键盘导航）
+        }
+
     def setup_styles(self):
-        """配置TTK样式"""
+        """配置TTK样式 - 遵循终极指南规范"""
         dbg("setup_styles enter")
         style = ttk.Style()
         try:
             dbg(f"themes={style.theme_names()}")
-            style.theme_use('clam')
+            style.theme_use('clam')  # 🔑 关键：使用clam主题确保跨平台兼容
             dbg("theme_use clam ok")
         except Exception as e:
             dbg(f"theme_use clam failed: {e}; fallback default")
@@ -115,30 +151,80 @@ class ModernDualComparator:
             except Exception as ee:
                 dbg(f"theme_use default failed: {ee}")
         
-        # 按钮样式 - 参考成功实现
+        # 按钮基础配置（所有按钮共用）
+        button_base = {
+            'borderwidth': 0,        # 🔑 关键：无边框（现代化外观）
+            'focuscolor': 'none',    # 🔑 关键：无焦点框（干净外观）
+            'padding': (20, 10),     # 内边距：左右20px，上下10px
+        }
+        
+        # 主要按钮（用于重要操作）
         style.configure('Primary.TButton',
                        font=('SF Pro Text', 11, 'bold'),
                        foreground='white',
-                       background='#ff4757',
-                       borderwidth=0,
-                       focuscolor='none',
-                       padding=(15, 8))
+                       background=self.colors['primary'],
+                       **button_base)
         
+        # 成功按钮（用于确认操作）
         style.configure('Success.TButton',
                        font=('SF Pro Text', 11, 'bold'),
                        foreground='white',
-                       background='#2ed573',
-                       borderwidth=0,
-                       focuscolor='none',
-                       padding=(15, 8))
+                       background=self.colors['success'],
+                       **button_base)
         
+        # 危险按钮（用于删除等危险操作）
         style.configure('Danger.TButton',
                        font=('SF Pro Text', 11, 'bold'),
                        foreground='white',
-                       background='#ff3838',
-                       borderwidth=0,
-                       focuscolor='none',
-                       padding=(15, 8))
+                       background=self.colors['danger'],
+                       **button_base)
+        
+        # 次要按钮（用于辅助操作）
+        style.configure('Secondary.TButton',
+                       font=('SF Pro Text', 10),
+                       foreground=self.colors['text'],
+                       background=self.colors['border'],
+                       **button_base)
+        
+        # === 标签样式 ===
+        # 主标题
+        style.configure('Title.TLabel',
+                       background=self.colors['bg'],
+                       foreground=self.colors['text'],
+                       font=('SF Pro Display', 24, 'bold'))
+        
+        # 副标题
+        style.configure('Subtitle.TLabel',
+                       background=self.colors['bg'],
+                       foreground=self.colors['text_muted'],
+                       font=('SF Pro Text', 12))
+        
+        # 卡片标题
+        style.configure('CardTitle.TLabel',
+                       background=self.colors['card'],
+                       foreground=self.colors['text'],
+                       font=('SF Pro Display', 16, 'bold'))
+        
+        # 普通文字
+        style.configure('Info.TLabel',
+                       background=self.colors['card'],
+                       foreground=self.colors['text'],
+                       font=('SF Pro Text', 11))
+        
+        # 次要文字
+        style.configure('Muted.TLabel',
+                       background=self.colors['card'],
+                       foreground=self.colors['text_muted'],
+                       font=('SF Pro Text', 10))
+        
+        # === 输入框样式 ===
+        style.configure('Modern.TEntry',
+                       fieldbackground=self.colors['card'],
+                       borderwidth=1,
+                       relief='solid',
+                       bordercolor=self.colors['border'],
+                       insertcolor=self.colors['text'],       # 🔑 关键：光标颜色
+                       font=('SF Pro Text', 11))
         
         # Diff帧保存设置
         self.save_diff_frames = tk.BooleanVar(value=False)
@@ -161,13 +247,37 @@ class ModernDualComparator:
             'onnx_model_path': None,
             'video_path': None
         }
+
+    def create_card(self, parent, title=None):
+        """创建现代化卡片容器 - 遵循终极指南标准"""
+        # 卡片主容器
+        card = tk.Frame(parent, bg=self.colors['card'], relief='flat', bd=0)
+        card.configure(
+            highlightbackground=self.colors['border'], 
+            highlightthickness=1  # 1px边框
+        )
+        
+        if title:
+            # 卡片标题区域
+            header = tk.Frame(card, bg=self.colors['card'])
+            header.pack(fill='x', padx=25, pady=(20, 15))
+            
+            title_label = ttk.Label(header, text=title, style='CardTitle.TLabel')
+            title_label.pack(side='left')
+        
+        # 卡片内容区域
+        content = tk.Frame(card, bg=self.colors['card'])
+        padding_top = 0 if title else 25  # 有标题时减少顶部内边距
+        content.pack(fill='both', expand=True, padx=25, pady=(padding_top, 25))
+        
+        return card, content
     
     def setup_modern_ui(self):
-        """创建现代化界面"""
+        """创建现代化界面 - 遵循终极指南布局"""
         dbg("setup_modern_ui enter")
-        # 主容器
-        main_container = tk.Frame(self.root, bg='#f5f6fa')
-        main_container.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
+        # 主容器 - 使用标准边距
+        main_container = tk.Frame(self.root, bg=self.colors['bg'])
+        main_container.pack(fill=tk.BOTH, expand=True, padx=25, pady=20)
         dbg("main_container ok")
         
         # 顶部标题区域
@@ -175,8 +285,8 @@ class ModernDualComparator:
         dbg("header ok")
         
         # 中间内容区域
-        content_frame = tk.Frame(main_container, bg='#f5f6fa')
-        content_frame.pack(fill=tk.BOTH, expand=True, pady=(20, 0))
+        content_frame = tk.Frame(main_container, bg=self.colors['bg'])
+        content_frame.pack(fill=tk.BOTH, expand=True, pady=(25, 0))
         dbg("content_frame ok")
         
         # 左侧控制面板
@@ -192,33 +302,37 @@ class ModernDualComparator:
         dbg("stats ok")
     
     def create_header(self, parent):
-        """创建顶部标题区域"""
-        header_frame = tk.Frame(parent, bg='#ffffff', height=100)  # 增加高度
-        header_frame.pack(fill=tk.X, pady=(0, 20))
-        header_frame.pack_propagate(False)
+        """创建顶部标题区域 - 遵循终极指南设计"""
+        # 创建标题卡片
+        title_frame = tk.Frame(parent, bg=self.colors['bg'])
+        title_frame.pack(fill='x', pady=(0, 30))
         
-        # 创建现代化标题
-        title_container = tk.Frame(header_frame, bg='#ffffff')
-        title_container.pack(expand=True, fill=tk.BOTH)
+        # 主标题
+        ttk.Label(title_frame, text="AI Model Comparator", 
+                 style='Title.TLabel').pack(anchor='w')
         
-        tk.Label(title_container, text="AI Model Comparator", 
-                font=('SF Pro Display', 24, 'bold'),  # 减小字体
-                bg='#ffffff', fg='#2c3e50').pack(pady=(15, 5))  # 调整上下边距
+        # 副标题
+        ttk.Label(title_frame, text="PyTorch (.pt) vs ONNX Real-time Comparison Tool", 
+                 style='Subtitle.TLabel').pack(anchor='w', pady=(8, 0))
         
-        tk.Label(title_container, text="PyTorch (.pt) vs ONNX Real-time Comparison", 
-                font=('SF Pro Display', 14), 
-                bg='#ffffff', fg='#7f8c8d').pack(pady=(0, 5))
+        # 分割线
+        separator = tk.Frame(title_frame, height=2, bg=self.colors['border'])
+        separator.pack(fill='x', pady=(15, 0))
         
-        # 添加优化状态标识 - 调整字体和换行，确保完整显示
-        status_label = tk.Label(title_container, text="🎯 Perfect PT-ONNX Match with Letterbox\n✨ Zero Confidence Difference Achieved", 
-                font=('SF Pro Display', 9, 'bold'),  # 减小字体确保显示完整
-                bg='#ffffff', fg='#27ae60', 
-                justify=tk.CENTER)  # 居中对齐
-        status_label.pack(pady=(0, 8))  # 减少下边距
+        # 状态信息
+        status_frame = tk.Frame(title_frame, bg=self.colors['bg'])
+        status_frame.pack(fill='x', pady=(10, 0))
+        
+        # 使用标准字体样式
+        status_text = "Perfect PT-ONNX Match with Letterbox - Zero Confidence Difference Achieved"
+        tk.Label(status_frame, text=status_text,
+                font=('SF Pro Text', 10, 'bold'),
+                bg=self.colors['bg'], fg=self.colors['success'],
+                wraplength=800, justify=tk.LEFT).pack(anchor='w')
     
     def create_control_cards(self, parent):
-        """创建左侧控制卡片"""
-        control_container = tk.Frame(parent, bg='#f5f6fa', width=300)
+        """创建左侧控制卡片 - 使用标准卡片方法"""
+        control_container = tk.Frame(parent, bg=self.colors['bg'], width=300)
         control_container.pack(side=tk.LEFT, fill=tk.Y, padx=(0, 15))
         control_container.pack_propagate(False)
         
@@ -232,96 +346,59 @@ class ModernDualComparator:
         self.create_settings_card(control_container)
     
     def create_model_card(self, parent):
-        """创建模型选择卡片"""
-        card = tk.Frame(parent, bg='#ffffff', relief='flat', bd=0)
+        """创建模型选择卡片 - 使用标准卡片方法"""
+        card, content = self.create_card(parent, "Models")
         card.pack(fill=tk.X, pady=(0, 15))
         
-        # 卡片标题
-        title_frame = tk.Frame(card, bg='#ffffff', height=50)
-        title_frame.pack(fill=tk.X)
-        title_frame.pack_propagate(False)
-        
-        tk.Label(title_frame, text="🤖 Models", 
-                font=('SF Pro Display', 16, 'bold'), 
-                bg='#ffffff', fg='#2c3e50').pack(pady=15, padx=20, anchor=tk.W)
-        
-        # 分隔线
-        separator = tk.Frame(card, bg='#ecf0f1', height=1)
-        separator.pack(fill=tk.X, padx=20)
-        
         # PT模型区域
-        pt_section = tk.Frame(card, bg='#ffffff')
-        pt_section.pack(fill=tk.X, padx=20, pady=15)
+        pt_section = tk.Frame(content, bg=self.colors['card'])
+        pt_section.pack(fill=tk.X, pady=(0, 15))
         
-        tk.Label(pt_section, text="PyTorch Model", 
-                font=('SF Pro Display', 12, 'bold'), 
-                bg='#ffffff', fg='#e74c3c').pack(anchor=tk.W, pady=(0, 8))
+        ttk.Label(pt_section, text="PyTorch Model", style='Info.TLabel').pack(anchor=tk.W, pady=(0, 8))
         
         self.pt_btn = ttk.Button(pt_section, text="Select .pt Model", 
                                command=self.select_pt_model,
                                style='Primary.TButton')
         self.pt_btn.pack(fill=tk.X, pady=(0, 5))
         
-        self.pt_status = tk.Label(pt_section, text="No model selected", 
-                                 font=('SF Pro Display', 10), 
-                                 bg='#ffffff', fg='#95a5a6')
+        self.pt_status = ttk.Label(pt_section, text="No model selected", style='Muted.TLabel')
         self.pt_status.pack(anchor=tk.W)
         
         # ONNX模型区域
-        onnx_section = tk.Frame(card, bg='#ffffff')
-        onnx_section.pack(fill=tk.X, padx=20, pady=(0, 15))
+        onnx_section = tk.Frame(content, bg=self.colors['card'])
+        onnx_section.pack(fill=tk.X)
         
-        tk.Label(onnx_section, text="ONNX Model", 
-                font=('SF Pro Display', 12, 'bold'), 
-                bg='#ffffff', fg='#3498db').pack(anchor=tk.W, pady=(0, 8))
+        ttk.Label(onnx_section, text="ONNX Model", style='Info.TLabel').pack(anchor=tk.W, pady=(0, 8))
         
         self.onnx_btn = ttk.Button(onnx_section, text="Select .onnx Model", 
                                  command=self.select_onnx_model,
                                  style='Primary.TButton')
         self.onnx_btn.pack(fill=tk.X, pady=(0, 5))
         
-        self.onnx_status = tk.Label(onnx_section, text="No model selected", 
-                                   font=('SF Pro Display', 10), 
-                                   bg='#ffffff', fg='#95a5a6')
+        self.onnx_status = ttk.Label(onnx_section, text="No model selected", style='Muted.TLabel')
         self.onnx_status.pack(anchor=tk.W)
     
     def create_video_card(self, parent):
-        """创建视频控制卡片"""
-        card = tk.Frame(parent, bg='#ffffff', relief='flat', bd=0)
+        """创建视频控制卡片 - 使用标准卡片方法"""
+        card, content = self.create_card(parent, "Video Control")
         card.pack(fill=tk.X, pady=(0, 15))
         
-        # 卡片标题
-        title_frame = tk.Frame(card, bg='#ffffff', height=50)
-        title_frame.pack(fill=tk.X)
-        title_frame.pack_propagate(False)
-        
-        tk.Label(title_frame, text="🎥 Video Control", 
-                font=('SF Pro Display', 16, 'bold'), 
-                bg='#ffffff', fg='#2c3e50').pack(pady=15, padx=20, anchor=tk.W)
-        
-        # 分隔线
-        separator = tk.Frame(card, bg='#ecf0f1', height=1)
-        separator.pack(fill=tk.X, padx=20)
-        
         # 视频选择
-        video_section = tk.Frame(card, bg='#ffffff')
-        video_section.pack(fill=tk.X, padx=20, pady=15)
-        
-        self.video_btn = ttk.Button(video_section, text="📁 Select Video", 
+        self.video_btn = ttk.Button(content, text="Select Video", 
                                   command=self.select_video,
                                   style='Primary.TButton')
-        self.video_btn.pack(fill=tk.X, pady=(0, 8))
+        self.video_btn.pack(fill=tk.X, pady=(0, 15))
         
         # 播放控制
-        control_frame = tk.Frame(video_section, bg='#ffffff')
+        control_frame = tk.Frame(content, bg=self.colors['card'])
         control_frame.pack(fill=tk.X)
         
-        self.play_btn = ttk.Button(control_frame, text="▶ Play", 
+        self.play_btn = ttk.Button(control_frame, text="Play", 
                                  command=self.toggle_play,
                                  style='Success.TButton')
-        self.play_btn.pack(side=tk.LEFT, padx=(0, 8))
+        self.play_btn.pack(side=tk.LEFT, padx=(0, 10))
         
-        self.stop_btn = ttk.Button(control_frame, text="⏹ Stop", 
+        self.stop_btn = ttk.Button(control_frame, text="Stop", 
                                  command=self.stop_video,
                                  style='Danger.TButton')
         self.stop_btn.pack(side=tk.LEFT)
@@ -750,7 +827,11 @@ class ModernDualComparator:
                 
                 model_name = Path(model_path).stem
                 self.pt_btn.config(text=f"✓ {model_name}", style='Success.TButton')
-                self.pt_status.config(text=f"Model loaded ({precision}) successfully", fg='#27ae60')
+                # 更新状态标签 - 需要使用tk.Label而非ttk.Label来设置颜色
+                self.pt_status.destroy()
+                self.pt_status = tk.Label(self.pt_btn.master, text=f"Model loaded ({precision}) successfully", 
+                                        font=('SF Pro Text', 10), bg=self.colors['card'], fg=self.colors['success'])
+                self.pt_status.pack(anchor=tk.W)
                 self.update_status(f"PT model loaded ({precision}): {model_name}")
                 # 记录日志信息
                 self.log_data['pt_model_path'] = model_path
@@ -794,7 +875,11 @@ class ModernDualComparator:
                 
                 model_name = Path(model_path).stem
                 self.onnx_btn.config(text=f"✓ {model_name}", style='Primary.TButton')
-                self.onnx_status.config(text=f"Model loaded ({precision}) successfully", fg='#27ae60')
+                # 更新状态标签 - 需要使用tk.Label而非ttk.Label来设置颜色
+                self.onnx_status.destroy()
+                self.onnx_status = tk.Label(self.onnx_btn.master, text=f"Model loaded ({precision}) successfully", 
+                                          font=('SF Pro Text', 10), bg=self.colors['card'], fg=self.colors['success'])
+                self.onnx_status.pack(anchor=tk.W)
                 self.update_status(f"ONNX model loaded ({precision}): {model_name}")
                 # 记录日志信息
                 self.log_data['onnx_model_path'] = model_path

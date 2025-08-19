@@ -28,7 +28,8 @@ def create_rk3588_forward(detect_head):
     def rk3588_forward(self, x):
         """完全复制yolov8_train_inf.md第125-134行的forward逻辑"""
         y = []
-        for i in range(self.nl):
+        # 仅保留前三个尺度（P3/P4/P5），统一导出为6个输出张量
+        for i in range(min(self.nl, 3)):
             t1 = self.cv2[i](x[i])  # 回归分支
             t2 = self.cv3[i](x[i])  # 分类分支（保持logits格式，不加sigmoid）
             
